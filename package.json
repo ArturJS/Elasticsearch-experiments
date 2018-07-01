@@ -1,0 +1,26 @@
+{
+    "name": "Elasticsearch-experiments",
+    "version": "1.0.0",
+    "description": "Just for fun",
+    "main": "index.js",
+    "scripts": {
+        "start": "npm run start:elasticsearch && npm run start:app",
+        "start:app": "node src/main.js",
+        "start:elasticsearch": "docker-compose up",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ArturJS/Elasticsearch-experiments.git"
+    },
+    "keywords": [],
+    "author": "ArturJS",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ArturJS/Elasticsearch-experiments/issues"
+    },
+    "homepage": "https://github.com/ArturJS/Elasticsearch-experiments#readme",
+    "dependencies": {
+        "elasticsearch": "^15.0.0"
+    }
+}
