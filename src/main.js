@@ -44,9 +44,12 @@ const bulkCreate = async () => {
 
     console.log(result);
 };
-const getAll = async () => {
+const getAll = async ({ query }) => {
     const response = await esClient.search({
-        index: 'test_index'
+        index: 'test_index',
+        body: {
+            query
+        }
     });
     const students = response.hits.hits;
 
@@ -55,4 +58,12 @@ const getAll = async () => {
 
 // bulkCreate();
 
-getAll();
+getAll({
+    query: {
+        range: {
+            'skills.react': {
+                gte: '60'
+            }
+        }
+    }
+});
