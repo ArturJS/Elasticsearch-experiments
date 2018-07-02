@@ -21,6 +21,16 @@ const bulkCreate = async () => {
                 js: '20',
                 vue: '50'
             }
+        },
+        {
+            id: 3,
+            first_name: 'Sabrina',
+            last_name: 'Galloway',
+            skills: {
+                react: '50',
+                js: '20',
+                vue: '100'
+            }
         }
     ];
     const bulkCommands = [];
@@ -44,11 +54,12 @@ const bulkCreate = async () => {
 
     console.log(result);
 };
-const getAll = async ({ query }) => {
+const getAll = async ({ query, sort }) => {
     const response = await esClient.search({
         index: 'test_index',
         body: {
-            query
+            query,
+            sort
         }
     });
     const students = response.hits.hits;
@@ -59,11 +70,40 @@ const getAll = async ({ query }) => {
 // bulkCreate();
 
 getAll({
-    query: {
-        range: {
-            'skills.react': {
-                gte: '60'
-            }
+    // query: {
+    //     range: {
+    //         'skills.react': {
+    //             gte: '10'
+    //         }
+    //     }
+    // },
+    sort: {
+        _script: {
+            type: 'number',
+            script: {
+                lang: 'painless',
+                source: `
+                    return doc['id'].value;
+                `,
+
+                //     source: `
+                //     int total = 0;
+                //     for (int i = 0; i < params.search_fields.length; ++i) {
+                //         total += Integer.parseInt(doc['skills.react'].value);
+                //     }
+                //     return doc.id.value;
+                // `,
+
+                // source: `
+                //     return doc['first_name.raw'].length;
+                // `,
+                params: {
+                    search_fields: ['react', 'js', 'vue']
+                }
+            },
+            order: 'asc'
         }
     }
 });
+
+// TODO add aggregation of total score by all params
