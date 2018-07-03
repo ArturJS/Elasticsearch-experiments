@@ -7,9 +7,9 @@ const bulkCreate = async () => {
             first_name: 'Jack',
             last_name: 'Doe',
             skills: {
-                react: '70',
-                js: '80',
-                vue: '30'
+                react: 70,
+                js: 80,
+                vue: 30
             }
         },
         {
@@ -17,9 +17,9 @@ const bulkCreate = async () => {
             first_name: 'Bob',
             last_name: 'Burk',
             skills: {
-                react: '10',
-                js: '20',
-                vue: '50'
+                react: 10,
+                js: 20,
+                vue: 50
             }
         },
         {
@@ -27,9 +27,9 @@ const bulkCreate = async () => {
             first_name: 'Sabrina',
             last_name: 'Galloway',
             skills: {
-                react: '50',
-                js: '20',
-                vue: '100'
+                react: 50,
+                js: 20,
+                vue: 100
             }
         }
     ];
@@ -54,7 +54,14 @@ const bulkCreate = async () => {
 
     console.log(result);
 };
-const getAll = async ({ query, sort }) => {
+const clearIndex = async () => {
+    const result = await esClient.indices.delete({
+        index: 'test_index'
+    });
+
+    console.log('Drop index result ', result);
+};
+const getAll = async ({ query, sort } = {}) => {
     const response = await esClient.search({
         index: 'test_index',
         body: {
@@ -66,6 +73,8 @@ const getAll = async ({ query, sort }) => {
 
     console.log(JSON.stringify(students, null, '  '));
 };
+
+// clearIndex();
 
 // bulkCreate();
 
@@ -83,27 +92,17 @@ getAll({
             script: {
                 lang: 'painless',
                 source: `
-                    return doc['id'].value;
+                    int total = 0;
+                    for (int i = 0; i < params.search_fields.length; ++i) {
+                        total += doc['skills.'+ params.search_fields[i]].value;
+                    }
+                    return total;
                 `,
-
-                //     source: `
-                //     int total = 0;
-                //     for (int i = 0; i < params.search_fields.length; ++i) {
-                //         total += Integer.parseInt(doc['skills.react'].value);
-                //     }
-                //     return doc.id.value;
-                // `,
-
-                // source: `
-                //     return doc['first_name.raw'].length;
-                // `,
                 params: {
-                    search_fields: ['react', 'js', 'vue']
+                    search_fields: ['js'] //['react', 'js', 'vue']
                 }
             },
             order: 'asc'
         }
     }
 });
-
-// TODO add aggregation of total score by all params
