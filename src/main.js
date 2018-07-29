@@ -1,3 +1,7 @@
+require('dotenv-safe').config({
+    example: './.env.example',
+    path: './.env'
+});
 const esClient = require('./es-client');
 
 const random = () => Math.round(Math.random() * 100 + 1);
@@ -94,36 +98,44 @@ const getAll = async ({ query, sort } = {}) => {
     console.log('Total count: ', students.length);
 };
 
+const getIndices = async () => {
+    const response = await esClient.cat.indices();
+
+    console.log('Indices: ', JSON.stringify(response, null, '  '));
+};
+
+getIndices();
+
 // clearIndex();
 
 // bulkCreate();
 
-getAll({
-    // query: {
-    //     range: {
-    //         'skills.react': {
-    //             gte: '10'
-    //         }
-    //     }
-    // },
-    //
-    sort: {
-        _script: {
-            type: 'number',
-            script: {
-                lang: 'painless',
-                source: `
-                    int total = 0;
-                    for (int i = 0; i < params.search_fields.length; ++i) {
-                        total += doc['skills.'+ params.search_fields[i]].value;
-                    }
-                    return total;
-                `,
-                params: {
-                    search_fields: ['react', 'js', 'vue']
-                }
-            },
-            order: 'asc'
-        }
-    }
-});
+// getAll({
+//     // query: {
+//     //     range: {
+//     //         'skills.react': {
+//     //             gte: '10'
+//     //         }
+//     //     }
+//     // },
+//     //
+//     sort: {
+//         _script: {
+//             type: 'number',
+//             script: {
+//                 lang: 'painless',
+//                 source: `
+//                     int total = 0;
+//                     for (int i = 0; i < params.search_fields.length; ++i) {
+//                         total += doc['skills.'+ params.search_fields[i]].value;
+//                     }
+//                     return total;
+//                 `,
+//                 params: {
+//                     search_fields: ['react', 'js', 'vue']
+//                 }
+//             },
+//             order: 'asc'
+//         }
+//     }
+// });

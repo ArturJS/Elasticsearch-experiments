@@ -21,6 +21,9 @@
     },
     "homepage": "https://github.com/ArturJS/Elasticsearch-experiments#readme",
     "dependencies": {
-        "elasticsearch": "^15.0.0"
+        "aws-sdk": "^2.282.1",
+        "dotenv-safe": "^6.0.0",
+        "elasticsearch": "^15.0.0",
+        "http-aws-es": "^6.0.0"
     }
 }
