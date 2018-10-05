@@ -104,38 +104,38 @@ const getIndices = async () => {
     console.log('Indices: ', JSON.stringify(response, null, '  '));
 };
 
-getIndices();
+// getIndices();
 
 // clearIndex();
 
 // bulkCreate();
 
-// getAll({
-//     // query: {
-//     //     range: {
-//     //         'skills.react': {
-//     //             gte: '10'
-//     //         }
-//     //     }
-//     // },
-//     //
-//     sort: {
-//         _script: {
-//             type: 'number',
-//             script: {
-//                 lang: 'painless',
-//                 source: `
-//                     int total = 0;
-//                     for (int i = 0; i < params.search_fields.length; ++i) {
-//                         total += doc['skills.'+ params.search_fields[i]].value;
-//                     }
-//                     return total;
-//                 `,
-//                 params: {
-//                     search_fields: ['react', 'js', 'vue']
-//                 }
-//             },
-//             order: 'asc'
-//         }
-//     }
-// });
+getAll({
+    // query: {
+    //     range: {
+    //         'skills.react': {
+    //             gte: '10'
+    //         }
+    //     }
+    // },
+    //
+    sort: {
+        _script: {
+            type: 'number',
+            script: {
+                lang: 'painless',
+                source: `
+                    int total = 0;
+                    for (int i = 0; i < params.search_fields.length; ++i) {
+                        total += doc['skills.'+ params.search_fields[i]].value;
+                    }
+                    return total;
+                `,
+                params: {
+                    search_fields: ['react', 'js', 'vue']
+                }
+            },
+            order: 'asc'
+        }
+    }
+});

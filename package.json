@@ -24,6 +24,7 @@
         "aws-sdk": "^2.282.1",
         "dotenv-safe": "^6.0.0",
         "elasticsearch": "^15.0.0",
-        "http-aws-es": "^6.0.0"
+        "http-aws-es": "^6.0.0",
+        "lodash": "^4.17.11"
     }
 }
